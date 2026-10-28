@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  document.documentElement.classList.add('js');
   const GITHUB_USUARIO = 'Dudamaiap';
 
   // ---------- Menu mobile ----------
@@ -7,25 +8,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   toggle.addEventListener('click', () => {
     const aberto = links.classList.toggle('aberto');
-    toggle.setAttribute('aria-expanded', aberto);
+    toggle.setAttribute('aria-expanded', String(aberto));
+    toggle.setAttribute('aria-label', aberto ? 'Fechar menu' : 'Abrir menu');
   });
 
   links.querySelectorAll('a').forEach((a) =>
     a.addEventListener('click', () => {
       links.classList.remove('aberto');
       toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Abrir menu');
     })
   );
 
-  // ---------- CTA: rola até o formulário ----------
-  const ctaBtn = document.getElementById('cta-btn');
-  const secaoContato = document.getElementById('contato');
-  const inputNome = document.getElementById('nome');
-
-  ctaBtn.addEventListener('click', () => {
-    secaoContato.scrollIntoView({ behavior: 'smooth' });
-    setTimeout(() => inputNome.focus({ preventScroll: true }), 700);
+  document.addEventListener('keydown', (evento) => {
+    if (evento.key === 'Escape' && links.classList.contains('aberto')) {
+      links.classList.remove('aberto');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Abrir menu');
+      toggle.focus();
+    }
   });
+  const inputNome = document.getElementById('nome');
 
   // ---------- API do GitHub: repositórios ----------
   const reposContainer = document.getElementById('repos');
@@ -91,14 +94,17 @@ document.addEventListener('DOMContentLoaded', () => {
     cepStatus.className = `cep-status ${tipo}`;
   }
 
-  async function buscarCep(cep) {
+  let consultaCep = 0;
+
+  async function buscarCep(cep, consulta) {
     definirStatus('Buscando endereço...');
     try {
       const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
       if (!resposta.ok) throw new Error('Falha na requisição');
 
       const dados = await resposta.json();
-      if (dados.erro) {
+      if (consulta !== consultaCep) return;
+      if (dados.erro || !dados.localidade || !dados.uf) {
         inputCidade.value = '';
         definirStatus('CEP não encontrado.', 'erro');
         return;
@@ -108,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const endereco = [dados.logradouro, dados.bairro].filter(Boolean).join(', ');
       definirStatus(endereco || 'Endereço encontrado.', 'ok');
     } catch (erro) {
+      if (consulta !== consultaCep) return;
       inputCidade.value = '';
       definirStatus('Não foi possível consultar o CEP. Tente novamente.', 'erro');
     }
@@ -117,8 +124,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const digitos = inputCep.value.replace(/\D/g, '').slice(0, 8);
     inputCep.value = digitos.length > 5 ? `${digitos.slice(0, 5)}-${digitos.slice(5)}` : digitos;
 
+    const consulta = ++consultaCep;
+    inputCidade.value = '';
     if (digitos.length === 8) {
-      buscarCep(digitos);
+      buscarCep(digitos, consulta);
     } else {
       inputCidade.value = '';
       definirStatus('');
@@ -143,13 +152,26 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const primeiroNome = inputNome.value.trim().split(' ')[0];
-    msgSucesso.textContent = `Obrigada pelo contato, ${primeiroNome}! Sua mensagem foi recebida e retornarei em breve.`;
+    const nome = inputNome.value.trim();
+    const mensagem = document.getElementById('mensagem').value.trim();
+    if (nome.length < 2 || mensagem.length < 10) {
+      msgSucesso.textContent = 'Preencha seu nome e uma mensagem com pelo menos 10 caracteres.';
+      msgSucesso.classList.add('visivel');
+      (nome.length < 2 ? inputNome : document.getElementById('mensagem')).focus();
+      return;
+    }
+    const email = document.getElementById('email').value.trim();
+    const assunto = encodeURIComponent('Contato pelo portfólio — ' + nome);
+    const corpo = encodeURIComponent([
+      'Nome: ' + nome,
+      'E-mail: ' + email,
+      'CEP: ' + inputCep.value,
+      'Cidade / UF: ' + inputCidade.value,
+      '', mensagem
+    ].join('\n'));
+    window.location.href = 'mailto:dudamaiapereira@gmail.com?subject=' + assunto + '&body=' + corpo;
+    msgSucesso.textContent = 'Seu aplicativo de e-mail foi solicitado. Conclua o envio nele. Se não abrir, use o endereço de e-mail acima. Seus dados continuam preenchidos.';
     msgSucesso.classList.add('visivel');
-
-    form.reset();
-    definirStatus('');
-    setTimeout(() => msgSucesso.classList.remove('visivel'), 6000);
   });
 
   // ---------- Ano no rodapé ----------
