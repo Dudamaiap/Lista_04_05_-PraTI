@@ -1,0 +1,46 @@
+/* ---------- Personalização: portfólio ---------- */
+h4 { font-family: var(--fonte-titulo); color: var(--cor-primaria); font-size: 1rem; margin-bottom: 0.8rem; }
+
+.hero-botoes { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+.btn-outline { background: transparent; color: var(--cor-destaque); border: 2px solid var(--cor-destaque); }
+.btn-outline:hover { background: var(--cor-destaque); color: var(--cor-primaria); transform: translateY(-2px); }
+.section .btn-outline { color: var(--cor-destaque-escura); border-color: var(--cor-destaque-escura); }
+.section .btn-outline:hover { background: var(--cor-destaque-escura); color: #fff; }
+
+/* Sobre / habilidades */
+.sobre-texto { max-width: 800px; margin-bottom: 3rem; }
+.skills-grupos { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+.skill-grupo { background: #fff; border: 1px solid var(--cor-borda); border-radius: var(--raio); padding: 1.4rem; }
+.skills li.estudo { background: transparent; border: 1px dashed var(--cor-destaque-escura); }
+.legenda { margin-top: 1rem; font-size: 0.85rem; color: #64748b; }
+
+/* Linha do tempo */
+.timeline { border-left: 2px solid var(--cor-borda); padding-left: 2rem; display: grid; gap: 2.5rem; }
+.timeline-item { position: relative; }
+.timeline-item::before {
+  content: '';
+  position: absolute; left: calc(-2rem - 7px); top: 0.35rem;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--cor-destaque);
+  box-shadow: 0 0 0 4px #ccfbf1;
+}
+.timeline-data { font-size: 0.85rem; font-weight: 600; color: var(--cor-destaque-escura); text-transform: uppercase; letter-spacing: 0.5px; }
+.timeline-item h3 { margin: 0.3rem 0 0.2rem; }
+.timeline-local { color: #64748b; margin-bottom: 0.6rem; }
+.timeline-item ul { padding-left: 1.2rem; }
+.timeline-item li + li { margin-top: 0.3rem; }
+
+/* Cards e repositórios */
+.subtitulo-bloco { font-size: 1.4rem; margin: 3.5rem 0 1.5rem; }
+.card-label { display: inline-block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 0.5rem; }
+.card-repo { display: flex; flex-direction: column; }
+.card-repo .card-tags { margin-top: auto; padding-top: 1rem; }
+.repos-status { color: #64748b; }
+.btn-ver-github { margin-top: 2rem; }
+
+/* Contato */
+.section-alt .form { background: var(--cor-clara); }
+.contato-info { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 2rem; }
+.contato-info a { color: var(--cor-destaque-escura); font-weight: 600; }
+.contato-info a:hover { text-decoration: underline; }
