@@ -8,15 +8,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <header class="header">
     <nav class="nav container">
       <a href="#inicio" class="logo">Duda<span>Maia</span></a>
-      <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
-      <ul class="nav-links">
+      <button class="nav-toggle" type="button" aria-controls="menu-principal" aria-label="Abrir menu" aria-expanded="false">☰</button>
+      <ul class="nav-links" id="menu-principal">
         <li><a href="#sobre">Sobre</a></li>
         <li><a href="#experiencia">Experiência</a></li>
         <li><a href="#projetos">Projetos</a></li>
@@ -33,7 +33,7 @@
         <h1>Maria Eduarda Maia Pereira</h1>
         <p class="hero-slogan">Estudante de Ciência da Computação na UFMT, desenvolvendo soluções com Python, Machine Learning e Inteligência Artificial para problemas reais.</p>
         <div class="hero-botoes">
-          <button id="cta-btn" class="btn btn-primary">Saiba Mais</button>
+          <a href="#sobre" class="btn btn-primary">Saiba Mais</a>
           <a href="https://github.com/Dudamaiap" target="_blank" rel="noopener" class="btn btn-outline">GitHub</a>
         </div>
       </div>
@@ -230,15 +230,15 @@
           <div class="form-grid">
             <div class="campo">
               <label for="nome">Nome</label>
-              <input type="text" id="nome" name="nome" placeholder="Seu nome" required minlength="2">
+              <input type="text" id="nome" name="nome" autocomplete="name" placeholder="Seu nome" required minlength="2">
             </div>
             <div class="campo">
               <label for="email">E-mail</label>
-              <input type="email" id="email" name="email" placeholder="voce@email.com" required>
+              <input type="email" id="email" name="email" autocomplete="email" placeholder="voce@email.com" required>
             </div>
             <div class="campo">
               <label for="cep">CEP</label>
-              <input type="text" id="cep" name="cep" placeholder="00000-000" inputmode="numeric" maxlength="9" required pattern="\d{5}-\d{3}">
+              <input type="text" id="cep" name="cep" autocomplete="postal-code" aria-describedby="cep-status" placeholder="00000-000" inputmode="numeric" maxlength="9" required pattern="\d{5}-\d{3}">
               <span id="cep-status" class="cep-status" aria-live="polite"></span>
             </div>
             <div class="campo">
@@ -250,7 +250,8 @@
               <textarea id="mensagem" name="mensagem" placeholder="Escreva sua mensagem..." required minlength="10"></textarea>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary">Enviar mensagem</button>
+          <button type="submit" class="btn btn-primary">Preparar e-mail</button>
+          <p class="form-aviso">O botão abre seu aplicativo de e-mail com a mensagem preenchida. Conclua o envio por lá.</p>
           <div id="mensagem-sucesso" class="mensagem-sucesso" role="status"></div>
         </form>
       </div>
@@ -261,6 +262,6 @@
     <p>© <span id="ano"></span> Maria Eduarda Maia Pereira. Todos os direitos reservados.</p>
   </footer>
 
-  <script src="js/script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
